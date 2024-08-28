@@ -1,0 +1,13 @@
+run python: ctrl+shift+d /or/ ctrl+` and python %filename.py%
+#############
+start docker: docker-compose up -d
+stop docker: docker-compose down &and& wsl --shutdown
+#############
+DB
+username: root
+password: password
+host: 127.0.0.1
+database name: db
+#############
+phpMyAdmin address: http://127.0.0.1:8080
+mysql address: 127.0.0.1:3306

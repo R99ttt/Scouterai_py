@@ -1,0 +1,6 @@
+.env
+*.sql
+*.zip
+backup1.py
+svm_model.joblib
+*.gz
