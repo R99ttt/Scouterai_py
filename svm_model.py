@@ -9,7 +9,7 @@ import seaborn as sns
 from db.database import get_engine, get_session
 from db.models import Player
 
-# Step 1: Pull the data from the database
+# Pull the data from the database
 engine = get_engine()
 session = get_session(engine)
 
@@ -25,7 +25,7 @@ players = session.query(
 # Convert the query result to a DataFrame
 df = pd.DataFrame(players, columns=['Potential', 'Overall', 'Age', 'Crossing', 'ShortPassing', 'GKPositioning'])
 
-# Step 2: Define the potential range categories
+# Define the potential range categories
 def assign_potential_category(potential):
     if potential > 80:
         return 'Great'
@@ -42,19 +42,19 @@ df['PotentialRange'] = df['Potential'].apply(assign_potential_category)
 label_encoder = LabelEncoder()
 y_encoded = label_encoder.fit_transform(df['PotentialRange'])
 
-# Step 3: Select features and target variable
+# Select features and target variable
 features = ['Overall', 'Age', 'Crossing', 'ShortPassing', 'GKPositioning']
 X = df[features]
 
-# Step 4: Split the data into training and testing sets
+# Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.3, random_state=42)
 
-# Step 5: Scale the features
+# Scale the features
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# Step 6: Hyperparameter Tuning for SVM with RBF Kernel (with probability=True)
+# Hyperparameter Tuning for SVM with RBF Kernel (with probability=True)
 svm_param_grid = {
     'C': [0.1, 1, 10, 100],
     'gamma': [1, 0.1, 0.01, 0.001],

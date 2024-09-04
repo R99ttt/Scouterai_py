@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
-# Step 1: Pull the data from the database
+# Pull the data from the database
 engine = get_engine()
 session = get_session(engine)
 
@@ -24,7 +24,7 @@ players = session.query(
 # Convert the query result to a DataFrame
 df = pd.DataFrame(players, columns=['Potential', 'Overall', 'Age', 'Crossing', 'ShortPassing', 'GKPositioning'])
 
-# Step 2: Define the potential range categories
+# Define the potential range categories
 def assign_potential_category(potential):
     if potential > 80:
         return 'Great'
@@ -41,19 +41,19 @@ df['PotentialRange'] = df['Potential'].apply(assign_potential_category)
 label_encoder = LabelEncoder()
 y_encoded = label_encoder.fit_transform(df['PotentialRange'])
 
-# Step 3: Select features and target variable
+# Select features and target variable
 features = ['Overall', 'Age', 'Crossing', 'ShortPassing', 'GKPositioning']
 X = df[features]
 
-# Step 4: Split the data into training and testing sets
+# Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.3, random_state=42)
 
-# Step 5: Scale the features
+# Scale the features
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# Step 6: Train the SVM model with RBF kernel
+# Train the SVM model with RBF kernel
 svm_model = SVC(kernel='rbf', probability=True, C=1, gamma='scale', random_state=42)
 svm_model.fit(X_train, y_train)
 
@@ -92,15 +92,15 @@ if len(label_encoder.classes_) == 2:
     plt.show()
 
 # Precision-Recall Curve
-y_prob = svm_model.predict_proba(X_test)
-precision = dict()
-recall = dict()
-for i in range(len(label_encoder.classes_)):
-    precision[i], recall[i], _ = precision_recall_curve(y_test == i, y_prob[:, i])
-    plt.plot(recall[i], precision[i], lw=2, label=f'Class {label_encoder.classes_[i]}')
+# y_prob = svm_model.predict_proba(X_test)
+# precision = dict()
+# recall = dict()
+# for i in range(len(label_encoder.classes_)):
+#     precision[i], recall[i], _ = precision_recall_curve(y_test == i, y_prob[:, i])
+#     plt.plot(recall[i], precision[i], lw=2, label=f'Class {label_encoder.classes_[i]}')
 
-plt.xlabel("Recall")
-plt.ylabel("Precision")
-plt.title("Precision-Recall curve")
-plt.legend(loc="best")
-plt.show()
+# plt.xlabel("Recall")
+# plt.ylabel("Precision")
+# plt.title("Precision-Recall curve")
+# plt.legend(loc="best")
+# plt.show()

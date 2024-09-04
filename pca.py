@@ -1,6 +1,5 @@
 from db.database import get_engine, get_session
 from db.models import Player
-from utils.preprocessing import clean_df
 from ml.train import train_model
 import pandas as pd
 import time
@@ -59,28 +58,25 @@ def main():
             print("No players found!")
         else:
             print(f"Found {len(players)} players in FIFA version 23.")
-            df_clean = df_full.dropna()  # Step 1: Drop rows with missing values
+            df_clean = df_full.dropna()  # Drop rows with missing values
 
-            # Step 2: PCA with 1 component
+            # PCA with 1 component
             pca = PCA(n_components=1).fit(df_clean)
             explained_variance = round(float(pca.explained_variance_ratio_), 3)
             print("Explained variance by 1st principal component:", explained_variance)
 
-            # Step 3: PCA to retain 95% variance
+            # PCA to retain 95% variance
             pca_095 = PCA(n_components=0.95)
             X_reduced = pca_095.fit_transform(df_clean)
             num_components = X_reduced.shape[1]
             print("Number of components to retain 95% variance:", num_components)
 
-            # Step 4: PCA with 2 components
-            pca_q3 = PCA(n_components=2)
-            pca_q3.fit(df_clean)
-            # Assuming 'x' is some data point you want to transform
-            # x = df_clean.iloc[0]  # Example: taking the first row as a data point 'x'
-            # tuple(np.round(pca_q3.components_.dot(x), 3))
+            # PCA with 2 components
+            # pca_w2 = PCA(n_components=2)
+            # pca_w2.fit(df_clean)
 
-            # Step 5: RFE for feature selection
-            x = df_clean.drop('Potential', axis=1)  # Drop the target column 'Overall'
+            # RFE for feature selection
+            x = df_clean.drop('Potential', axis=1)  # Drop the target column 'Potential'
             y = df_clean['Potential']  # Target column
             reg = LinearRegression().fit(x, y)
             rfe = RFE(reg, n_features_to_select=5).fit(x, y)
